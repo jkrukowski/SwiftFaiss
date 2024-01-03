@@ -1,0 +1,39 @@
+--allman false
+--binarygrouping none
+--closingparen balanced
+--commas always
+--conflictmarkers reject
+--decimalgrouping none
+--elseposition same-line
+--empty void
+--exponentcase lowercase
+--exponentgrouping disabled
+--extensionacl on-declarations
+--fractiongrouping disabled
+--fragment false
+--header ignore
+--hexgrouping none
+--hexliteralcase uppercase
+--ifdef indent
+--importgrouping alphabetized
+--indent 4
+--indentcase false
+--linebreaks lf
+--maxwidth none
+--nospaceoperators 
+--octalgrouping none
+--operatorfunc spaced
+--patternlet hoist
+--self remove
+--selfrequired 
+--semicolons never
+--stripunusedargs closure-only
+--tabwidth unspecified
+--trailingclosures 
+--trimwhitespace always
+--wraparguments before-first
+--wrapcollections before-first
+--xcodeindentation disabled
+--commas inline
+--decimalgrouping 3
+--exclude Tests/XCTestManifests.swift,Tests/BadConfig,Snapshots,Build,PluginTests
