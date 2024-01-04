@@ -36,21 +36,21 @@ public enum MetricType {
     var faissMetricType: FaissMetricType {
         switch self {
         case .innterProduct:
-            return METRIC_INNER_PRODUCT
+            METRIC_INNER_PRODUCT
         case .l2:
-            return METRIC_L2
+            METRIC_L2
         case .l1:
-            return METRIC_L1
+            METRIC_L1
         case .linf:
-            return METRIC_Linf
+            METRIC_Linf
         case .lp:
-            return METRIC_Lp
+            METRIC_Lp
         case .canberra:
-            return METRIC_Canberra
+            METRIC_Canberra
         case .brayCurtis:
-            return METRIC_BrayCurtis
+            METRIC_BrayCurtis
         case .jensenShannon:
-            return METRIC_JensenShannon
+            METRIC_JensenShannon
         }
     }
 }

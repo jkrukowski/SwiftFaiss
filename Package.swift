@@ -13,6 +13,7 @@ let package = Package(
         .executable(name: "swift-faiss", targets: ["SwiftFaissCLI"])
     ],
     dependencies: [
+        .package(url: "https://github.com/jkrukowski/FaissMobile", from: "0.0.1"),
         .package(url: "https://github.com/apple/swift-collections.git", from: "1.0.5"),
         .package(url: "https://github.com/apple/swift-log", from: "1.5.3"),
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.3.0"),
@@ -49,22 +50,10 @@ let package = Package(
         .target(
             name: "SwiftFaissC",
             dependencies: [
-                .target(name: "FaissC"),
-                .target(name: "Faiss"),
-                .target(name: "OpenMP")
+                .product(name: "FAISS", package: "FaissMobile"),
+                .product(name: "FAISS_C", package: "FaissMobile"),
+                .product(name: "OpenMP", package: "FaissMobile"),
             ]
-        ),
-        .binaryTarget(
-            name: "FaissC",
-            path: "Libs/faiss_c.xcframework"
-        ),
-        .binaryTarget(
-            name: "Faiss",
-            path: "Libs/faiss.xcframework"
-        ),
-        .binaryTarget(
-            name: "OpenMP",
-            path: "Libs/openmp.xcframework"
         ),
         .testTarget(
             name: "SwiftFaissTests",

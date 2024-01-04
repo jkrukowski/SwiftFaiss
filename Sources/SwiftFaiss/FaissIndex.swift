@@ -23,6 +23,10 @@ open class FaissIndex {
         self.indexPtr = indexPtr
     }
 
+    public static func flatL2(_ d: Int) throws -> FaissIndex {
+        try FaissIndex(d: d, metricType: .l2, description: "Flat")
+    }
+
     open var d: Int {
         Int(faiss_Index_d(index))
     }
@@ -109,13 +113,13 @@ open class FaissIndex {
         )
     }
 
-    open func save(_ fileName: String) throws {
+    open func saveToFile(_ fileName: String) throws {
         try FaissIndexError.check(
             faiss_write_index_fname(index, fileName)
         )
     }
 
-    public static func load(_ fileName: String) throws -> FaissIndex {
+    public static func loadFromFile(_ fileName: String) throws -> FaissIndex {
         let indexPtr = UnsafeMutablePointer<OpaquePointer?>.allocate(capacity: 1)
         try FaissIndexError.check(
             faiss_read_index_fname(fileName, FAISS_IO_FLAG_READ_ONLY, indexPtr)

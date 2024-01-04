@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "faissmobile",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jkrukowski/FaissMobile",
+      "state" : {
+        "revision" : "9d5b9925305eea9398cc92ce4a8e51c8a4b043af",
+        "version" : "0.0.1"
+      }
+    },
+    {
       "identity" : "swift-argument-parser",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-argument-parser",
