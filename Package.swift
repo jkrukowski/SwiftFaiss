@@ -6,7 +6,9 @@ let package = Package(
     name: "swift-faiss",
     platforms: [
         .macOS(.v14),
-        .iOS(.v16)
+        .iOS(.v17),
+        .tvOS(.v17),
+        .watchOS(.v10)
     ],
     products: [
         .library(name: "SwiftFaiss", targets: ["SwiftFaiss"]),
@@ -14,8 +16,6 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/jkrukowski/FaissMobile", from: "0.0.1"),
-        .package(url: "https://github.com/apple/swift-collections.git", from: "1.0.5"),
-        .package(url: "https://github.com/apple/swift-log", from: "1.5.3"),
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.3.0"),
         .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.50.4")
     ],
@@ -36,9 +36,7 @@ let package = Package(
         .target(
             name: "SwiftFaiss",
             dependencies: [
-                .target(name: "SwiftFaissC"),
-                .product(name: "Collections", package: "swift-collections"),
-                .product(name: "Logging", package: "swift-log")
+                .target(name: "SwiftFaissC")
             ],
             plugins: [
                 .plugin(

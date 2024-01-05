@@ -23,7 +23,7 @@ open class FaissIndex {
         self.indexPtr = indexPtr
     }
 
-    public static func flatL2(_ d: Int) throws -> FaissIndex {
+    public static func flatL2(d: Int) throws -> FaissIndex {
         try FaissIndex(d: d, metricType: .l2, description: "Flat")
     }
 
@@ -64,15 +64,15 @@ open class FaissIndex {
         )
     }
 
-    open func add(_ xs: [Float]) throws {
+    open func add(_ xs: [[Float]]) throws {
         try FaissIndexError.check(
-            faiss_Index_add(index, 1, xs)
+            faiss_Index_add(index, Int64(xs.count), xs.flatMap { $0 })
         )
     }
 
-    open func train(_ xs: [Float]) throws {
+    open func train(_ xs: [[Float]]) throws {
         try FaissIndexError.check(
-            faiss_Index_train(index, 1, xs)
+            faiss_Index_train(index, Int64(xs.count), xs.flatMap { $0 })
         )
     }
 
@@ -91,25 +91,30 @@ open class FaissIndex {
         )
     }
 
-    open func search(_ xs: [Float], k: Int) throws -> (distances: [Float], labels: [Int64]) {
+    open func search(_ xs: [[Float]], k: Int) throws -> (distances: [[Float]], labels: [[Int64]]) {
         let k = min(k, count)
-        let distances = UnsafeMutablePointer<Float>.allocate(capacity: d * k)
+        let n = xs.count
+        let distances = UnsafeMutablePointer<Float>.allocate(capacity: n * k)
         defer { distances.deallocate() }
-        let labels = UnsafeMutablePointer<Int64>.allocate(capacity: d * k)
+        let labels = UnsafeMutablePointer<Int64>.allocate(capacity: n * k)
         defer { labels.deallocate() }
         try FaissIndexError.check(
             faiss_Index_search(
                 index,
-                Int64(d),
-                xs,
+                Int64(n),
+                xs.flatMap { $0 },
                 Int64(k),
                 distances,
                 labels
             )
         )
         return (
-            distances: Array(UnsafeBufferPointer(start: distances, count: k)),
-            labels: Array(UnsafeBufferPointer(start: labels, count: k))
+            distances: stride(from: 0, to: n * k, by: k).map {
+                Array(UnsafeBufferPointer(start: distances.advanced(by: $0), count: k))
+            },
+            labels: stride(from: 0, to: n * k, by: k).map {
+                Array(UnsafeBufferPointer(start: labels.advanced(by: $0), count: k))
+            }
         )
     }
 
