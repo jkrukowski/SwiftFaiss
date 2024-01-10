@@ -1,7 +1,7 @@
 import SwiftFaissC
 
 public enum MetricType {
-    case innterProduct
+    case innerProduct
     case l2
     case l1
     case linf
@@ -13,7 +13,7 @@ public enum MetricType {
     init(_ faissMetricType: FaissMetricType) {
         switch faissMetricType {
         case METRIC_INNER_PRODUCT:
-            self = .innterProduct
+            self = .innerProduct
         case METRIC_L2:
             self = .l2
         case METRIC_L1:
@@ -35,7 +35,7 @@ public enum MetricType {
 
     var faissMetricType: FaissMetricType {
         switch self {
-        case .innterProduct:
+        case .innerProduct:
             METRIC_INNER_PRODUCT
         case .l2:
             METRIC_L2

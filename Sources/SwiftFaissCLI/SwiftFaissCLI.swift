@@ -5,7 +5,7 @@ import SwiftFaiss
 @main
 struct SwiftFaissCLI: AsyncParsableCommand {
     mutating func run() async throws {
-        let index = try FaissIndex(d: 4, metricType: .l2, description: "Flat")
+        let index = try Index(d: 4, metricType: .l2, description: "Flat")
         try index.add([
             [1, 2, 3, 4],
             [10, 20, 30, 40],

@@ -1,6 +1,6 @@
 import SwiftFaissC
 
-public struct FaissIndexError: Error {
+public struct IndexError: Error {
     public let resultCode: Int32
     public let message: String
 
@@ -20,7 +20,7 @@ public struct FaissIndexError: Error {
     }
 
     public static func check(_ resultCode: Int32) throws {
-        if let error = FaissIndexError(resultCode) {
+        if let error = IndexError(resultCode) {
             throw error
         }
     }
