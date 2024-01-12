@@ -1,6 +1,6 @@
 import SwiftFaissC
 
-public class Index: BaseIndex {
+public class AnyIndex: BaseIndex {
     public internal(set) var indexPointer: IndexPointer
 
     deinit {
@@ -33,15 +33,19 @@ public class Index: BaseIndex {
         self.init(indexPointer: IndexPointer(indexPtr.pointee!))
     }
 
-    public var IVF: IndexIVF? {
-        IndexIVF.from(pointer: indexPointer)
+    public var flat: FlatIndex? {
+        FlatIndex.from(indexPointer)
     }
 
-    public var IVFFlat: IndexIVFFlat? {
-        IndexIVFFlat.from(pointer: indexPointer)
+    public var IVF: IVFIndex? {
+        IVFIndex.from(indexPointer)
     }
 
-    public var LSH: IndexLSH? {
-        IndexLSH.from(pointer: indexPointer)
+    public var IVFFlat: IVFFlatIndex? {
+        IVFFlatIndex.from(indexPointer)
+    }
+
+    public var LSH: LSHIndex? {
+        LSHIndex.from(indexPointer)
     }
 }

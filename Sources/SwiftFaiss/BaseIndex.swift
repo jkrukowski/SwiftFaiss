@@ -11,12 +11,18 @@ public protocol BaseIndex {
 
     func add(_ xs: [[Float]]) throws
     func add(_ xs: [[Float]], ids: [Int]) throws
+    func assign(_ xs: [[Float]], k: Int) throws -> [[Int]]
     func train(_ xs: [[Float]]) throws
     func reconstruct(_ key: Int) throws -> [Float]
+    @discardableResult
+    func removeIds(_ range: Range<Int>) throws -> Int
+    @discardableResult
+    func removeIds(_ xs: [Int]) throws -> Int
     func reset() throws
-    func search(_ xs: [[Float]], k: Int) throws -> (distances: [[Float]], labels: [[Int]])
+    func search(_ xs: [[Float]], k: Int) throws -> SearchResult
+    func searchRange(_ xs: [[Float]], radius: Float) throws -> SearchRangeResult
     func saveToFile(_ fileName: String) throws
-    func clone() throws -> Index
+    func clone() throws -> AnyIndex
 }
 
 extension BaseIndex {
@@ -42,6 +48,26 @@ extension BaseIndex {
         }
         set {
             faiss_Index_set_verbose(indexPointer.pointer, newValue ? 1 : 0)
+        }
+    }
+
+    public func assign(_ xs: [[Float]], k: Int) throws -> [[Int]] {
+        let k = min(k, count)
+        let n = xs.count
+        let capacity = n * k
+        let labels = UnsafeMutablePointer<Int64>.allocate(capacity: capacity)
+        defer { labels.deallocate() }
+        try IndexError.check(
+            faiss_Index_assign(
+                indexPointer.pointer,
+                Int64(n),
+                xs.flatMap { $0 },
+                labels,
+                Int64(k)
+            )
+        )
+        return stride(from: 0, to: capacity, by: k).map {
+            Array(UnsafeBufferPointer(start: labels.advanced(by: $0), count: k)).map { Int($0) }
         }
     }
 
@@ -84,7 +110,37 @@ extension BaseIndex {
         )
     }
 
-    public func search(_ xs: [[Float]], k: Int) throws -> (distances: [[Float]], labels: [[Int]]) {
+    @discardableResult
+    public func removeIds(_ range: Range<Int>) throws -> Int {
+        let selector = try IDSelector.range(range)
+        let removedCount = UnsafeMutablePointer<Int>.allocate(capacity: 1)
+        defer { removedCount.deallocate() }
+        try IndexError.check(
+            faiss_Index_remove_ids(
+                indexPointer.pointer,
+                selector.indexPointer.pointer,
+                removedCount
+            )
+        )
+        return removedCount.pointee
+    }
+
+    @discardableResult
+    public func removeIds(_ xs: [Int]) throws -> Int {
+        let selector = try IDSelector.batch(xs)
+        let removedCount = UnsafeMutablePointer<Int>.allocate(capacity: 1)
+        defer { removedCount.deallocate() }
+        try IndexError.check(
+            faiss_Index_remove_ids(
+                indexPointer.pointer,
+                selector.indexPointer.pointer,
+                removedCount
+            )
+        )
+        return removedCount.pointee
+    }
+
+    public func search(_ xs: [[Float]], k: Int) throws -> SearchResult {
         let k = min(k, count)
         let n = xs.count
         let capacity = n * k
@@ -102,7 +158,7 @@ extension BaseIndex {
                 labels
             )
         )
-        return (
+        return SearchResult(
             distances: stride(from: 0, to: capacity, by: k).map {
                 Array(UnsafeBufferPointer(start: distances.advanced(by: $0), count: k))
             },
@@ -112,18 +168,36 @@ extension BaseIndex {
         )
     }
 
+    public func searchRange(_ xs: [[Float]], radius: Float) throws -> SearchRangeResult {
+        let indexPtr = UnsafeMutablePointer<OpaquePointer?>.allocate(capacity: 1)
+        defer { indexPtr.deallocate() }
+        try IndexError.check(
+            faiss_RangeSearchResult_new(indexPtr, Int64(xs.count))
+        )
+        try IndexError.check(
+            faiss_Index_range_search(
+                indexPointer.pointer,
+                Int64(xs.count),
+                xs.flatMap { $0 },
+                radius,
+                indexPtr.pointee
+            )
+        )
+        return SearchRangeResultProcessor(indexPointer: IndexPointer(indexPtr.pointee!)).result()
+    }
+
     public func saveToFile(_ fileName: String) throws {
         try IndexError.check(
             faiss_write_index_fname(indexPointer.pointer, fileName)
         )
     }
 
-    public func clone() throws -> Index {
+    public func clone() throws -> AnyIndex {
         let indexPtr = UnsafeMutablePointer<OpaquePointer?>.allocate(capacity: 1)
         defer { indexPtr.deallocate() }
         try IndexError.check(
             faiss_clone_index(indexPointer.pointer, indexPtr)
         )
-        return Index(indexPointer: IndexPointer(indexPtr.pointee!))
+        return AnyIndex(indexPointer: IndexPointer(indexPtr.pointee!))
     }
 }

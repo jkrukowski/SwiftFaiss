@@ -1,6 +1,6 @@
 import SwiftFaissC
 
-public final class IndexIVFFlat: BaseIndex {
+public final class IVFFlatIndex: BaseIndex {
     public internal(set) var indexPointer: IndexPointer
 
     deinit {
@@ -13,11 +13,11 @@ public final class IndexIVFFlat: BaseIndex {
         self.indexPointer = indexPointer
     }
 
-    static func from(pointer: IndexPointer) -> IndexIVFFlat? {
-        faiss_IndexIVFFlat_cast(pointer.pointer) == nil ? nil : IndexIVFFlat(indexPointer: pointer)
+    static func from(_ indexPointer: IndexPointer) -> IVFFlatIndex? {
+        faiss_IndexIVFFlat_cast(indexPointer.pointer) == nil ? nil : IVFFlatIndex(indexPointer: indexPointer)
     }
 
-    public convenience init(quantizer: Index, d: Int, nlist: Int) throws {
+    public convenience init(quantizer: AnyIndex, d: Int, nlist: Int) throws {
         let indexPtr = UnsafeMutablePointer<OpaquePointer?>.allocate(capacity: 1)
         defer { indexPtr.deallocate() }
         try IndexError.check(
@@ -31,7 +31,7 @@ public final class IndexIVFFlat: BaseIndex {
         self.init(indexPointer: IndexPointer(indexPtr.pointee!))
     }
 
-    public convenience init(quantizer: Index, d: Int, nlist: Int, metricType: MetricType) throws {
+    public convenience init(quantizer: AnyIndex, d: Int, nlist: Int, metricType: MetricType) throws {
         let indexPtr = UnsafeMutablePointer<OpaquePointer?>.allocate(capacity: 1)
         defer { indexPtr.deallocate() }
         try IndexError.check(

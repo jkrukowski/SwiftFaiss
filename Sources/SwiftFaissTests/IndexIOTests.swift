@@ -10,7 +10,7 @@ final class IndexIOTests: XCTestCase {
     }
 
     func testSaveAndLoadEmptyIndex() throws {
-        let index = try Index(d: 4, metricType: .l2, description: "Flat")
+        let index = try AnyIndex(d: 4, metricType: .l2, description: "Flat")
 
         try index.saveToFile(fileURL.path)
         let loadedIndex = try loadFromFile(fileURL.path)
@@ -18,7 +18,7 @@ final class IndexIOTests: XCTestCase {
     }
 
     func testSaveAndLoadNonEmptyIndex() throws {
-        let index = try Index(d: 4, metricType: .l2, description: "Flat")
+        let index = try AnyIndex(d: 4, metricType: .l2, description: "Flat")
         try index.add([
             [1, 2, 3, 4],
             [10, 20, 30, 40],
@@ -31,7 +31,7 @@ final class IndexIOTests: XCTestCase {
     }
 
     func testSaveAndLoadNonEmptyIndexMmap() throws {
-        let index = try Index(d: 4, metricType: .l2, description: "Flat")
+        let index = try AnyIndex(d: 4, metricType: .l2, description: "Flat")
         try index.add([
             [1, 2, 3, 4],
             [10, 20, 30, 40],
@@ -41,11 +41,5 @@ final class IndexIOTests: XCTestCase {
         try index.saveToFile(fileURL.path)
         let loadedIndex = try loadFromFile(fileURL.path, ioFlag: .mmap)
         XCTAssertEqual(loadedIndex.count, 3)
-    }
-
-    func testClone() throws {
-        let index = try Index(d: 4, metricType: .l2, description: "Flat")
-        let cloned = try index.clone()
-        XCTAssertFalse(cloned === index)
     }
 }

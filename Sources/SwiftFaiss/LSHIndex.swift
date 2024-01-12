@@ -1,6 +1,6 @@
 import SwiftFaissC
 
-public final class IndexLSH: BaseIndex {
+public final class LSHIndex: BaseIndex {
     public internal(set) var indexPointer: IndexPointer
 
     deinit {
@@ -13,8 +13,8 @@ public final class IndexLSH: BaseIndex {
         self.indexPointer = indexPointer
     }
 
-    static func from(pointer: IndexPointer) -> IndexLSH? {
-        faiss_IndexLSH_cast(pointer.pointer) == nil ? nil : IndexLSH(indexPointer: pointer)
+    static func from(_ indexPointer: IndexPointer) -> LSHIndex? {
+        faiss_IndexLSH_cast(indexPointer.pointer) == nil ? nil : LSHIndex(indexPointer: indexPointer)
     }
 
     public convenience init(d: Int, nbits: Int) throws {

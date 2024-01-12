@@ -1,6 +1,6 @@
 import SwiftFaissC
 
-public final class IndexIVF: BaseIndex {
+public final class IVFIndex: BaseIndex {
     public internal(set) var indexPointer: IndexPointer
 
     deinit {
@@ -13,8 +13,8 @@ public final class IndexIVF: BaseIndex {
         self.indexPointer = indexPointer
     }
 
-    static func from(pointer: IndexPointer) -> IndexIVF? {
-        faiss_IndexIVF_cast(pointer.pointer) == nil ? nil : IndexIVF(indexPointer: pointer)
+    static func from(_ indexPointer: IndexPointer) -> IVFIndex? {
+        faiss_IndexIVF_cast(indexPointer.pointer) == nil ? nil : IVFIndex(indexPointer: indexPointer)
     }
 
     public var nprobe: Int {
