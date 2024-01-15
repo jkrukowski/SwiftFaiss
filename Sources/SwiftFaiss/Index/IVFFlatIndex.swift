@@ -17,7 +17,7 @@ public final class IVFFlatIndex: BaseIndex {
         faiss_IndexIVFFlat_cast(indexPointer.pointer) == nil ? nil : IVFFlatIndex(indexPointer: indexPointer)
     }
 
-    public convenience init(quantizer: AnyIndex, d: Int, nlist: Int) throws {
+    public convenience init(quantizer: FlatIndex, d: Int, nlist: Int) throws {
         let indexPtr = UnsafeMutablePointer<OpaquePointer?>.allocate(capacity: 1)
         defer { indexPtr.deallocate() }
         try IndexError.check(
@@ -31,7 +31,7 @@ public final class IVFFlatIndex: BaseIndex {
         self.init(indexPointer: IndexPointer(indexPtr.pointee!))
     }
 
-    public convenience init(quantizer: AnyIndex, d: Int, nlist: Int, metricType: MetricType) throws {
+    public convenience init(quantizer: FlatIndex, d: Int, nlist: Int, metricType: MetricType) throws {
         let indexPtr = UnsafeMutablePointer<OpaquePointer?>.allocate(capacity: 1)
         defer { indexPtr.deallocate() }
         try IndexError.check(

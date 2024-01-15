@@ -33,19 +33,35 @@ public class AnyIndex: BaseIndex {
         self.init(indexPointer: IndexPointer(indexPtr.pointee!))
     }
 
-    public var flat: FlatIndex? {
+    public func toFlat() -> FlatIndex? {
         FlatIndex.from(indexPointer)
     }
 
-    public var IVF: IVFIndex? {
+    public func toIVF() -> IVFIndex? {
         IVFIndex.from(indexPointer)
     }
 
-    public var IVFFlat: IVFFlatIndex? {
+    public func toIVFFlat() -> IVFFlatIndex? {
         IVFFlatIndex.from(indexPointer)
     }
 
-    public var LSH: LSHIndex? {
+    public func toLSH() -> LSHIndex? {
         LSHIndex.from(indexPointer)
+    }
+
+    public func toIDMap() -> IDMap? {
+        IDMap.from(indexPointer)
+    }
+
+    public func toIDMap2() -> IDMap2? {
+        IDMap2.from(indexPointer)
+    }
+
+    public func toRefineFlat() -> RefineFlatIndex? {
+        RefineFlatIndex.from(indexPointer)
+    }
+
+    public func toScalarQuantizer() -> ScalarQuantizerIndex? {
+        ScalarQuantizerIndex.from(indexPointer)
     }
 }
