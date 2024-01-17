@@ -1,6 +1,6 @@
 import SwiftFaissC
 
-public class IDMap2: BaseIndex {
+public final class IDMap2: BaseIndex {
     public internal(set) var indexPointer: IndexPointer
     // we keep a reference to the subIndex to prevent it from being deallocated
     private let subIndex: (any BaseIndex)?

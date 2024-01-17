@@ -1,6 +1,6 @@
 import SwiftFaissC
 
-public class FlatIndex: BaseIndex {
+public final class FlatIndex: BaseIndex {
     public internal(set) var indexPointer: IndexPointer
 
     deinit {

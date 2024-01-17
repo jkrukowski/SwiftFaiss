@@ -1,6 +1,6 @@
 import SwiftFaissC
 
-public class RefineFlatIndex: BaseIndex {
+public final class RefineFlatIndex: BaseIndex {
     public internal(set) var indexPointer: IndexPointer
     // we keep a reference to the subIndex to prevent it from being deallocated
     private let baseIndex: (any BaseIndex)?

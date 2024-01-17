@@ -1,6 +1,6 @@
 import SwiftFaissC
 
-public class AnyIndex: BaseIndex {
+public final class AnyIndex: BaseIndex {
     public internal(set) var indexPointer: IndexPointer
 
     deinit {
@@ -43,6 +43,10 @@ public class AnyIndex: BaseIndex {
 
     public func toIVFFlat() -> IVFFlatIndex? {
         IVFFlatIndex.from(indexPointer)
+    }
+
+    public func toIVFScalarQuantizer() -> IVFScalarQuantizerIndex? {
+        IVFScalarQuantizerIndex.from(indexPointer)
     }
 
     public func toLSH() -> LSHIndex? {

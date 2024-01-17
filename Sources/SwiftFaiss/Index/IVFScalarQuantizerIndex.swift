@@ -1,7 +1,9 @@
 import SwiftFaissC
 
-public class IFVScalarQuantizerIndex: BaseIndex {
+public class IVFScalarQuantizerIndex: BaseIndex {
     public internal(set) var indexPointer: IndexPointer
+    // we keep a reference to the quantizer to prevent it from being deallocated
+    private let quantizer: (any BaseIndex)?
 
     deinit {
         if isKnownUniquelyReferenced(&indexPointer) {
@@ -9,12 +11,14 @@ public class IFVScalarQuantizerIndex: BaseIndex {
         }
     }
 
-    init(indexPointer: IndexPointer) {
+    init(indexPointer: IndexPointer, quantizer: (any BaseIndex)?) {
         self.indexPointer = indexPointer
+        self.quantizer = quantizer
     }
 
-    static func from(_ indexPointer: IndexPointer) -> IFVScalarQuantizerIndex? {
-        faiss_IndexIVFScalarQuantizer_cast(indexPointer.pointer) == nil ? nil : IFVScalarQuantizerIndex(indexPointer: indexPointer)
+    static func from(_ indexPointer: IndexPointer) -> IVFScalarQuantizerIndex? {
+        faiss_IndexIVFScalarQuantizer_cast(indexPointer.pointer) == nil ?
+            nil : IVFScalarQuantizerIndex(indexPointer: indexPointer, quantizer: nil)
     }
 
     public convenience init(
@@ -38,7 +42,7 @@ public class IFVScalarQuantizerIndex: BaseIndex {
                 encodeResidual ? 1 : 0
             )
         )
-        self.init(indexPointer: IndexPointer(indexPtr.pointee!))
+        self.init(indexPointer: IndexPointer(indexPtr.pointee!), quantizer: quantizer)
     }
 
     public var nprobe: Int {

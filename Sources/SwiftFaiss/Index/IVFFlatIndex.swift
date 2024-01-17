@@ -2,6 +2,8 @@ import SwiftFaissC
 
 public final class IVFFlatIndex: BaseIndex {
     public internal(set) var indexPointer: IndexPointer
+    // we keep a reference to the quantizer to prevent it from being deallocated
+    private let quantizer: FlatIndex?
 
     deinit {
         if isKnownUniquelyReferenced(&indexPointer) {
@@ -9,12 +11,14 @@ public final class IVFFlatIndex: BaseIndex {
         }
     }
 
-    init(indexPointer: IndexPointer) {
+    init(indexPointer: IndexPointer, quantizer: FlatIndex?) {
         self.indexPointer = indexPointer
+        self.quantizer = quantizer
     }
 
     static func from(_ indexPointer: IndexPointer) -> IVFFlatIndex? {
-        faiss_IndexIVFFlat_cast(indexPointer.pointer) == nil ? nil : IVFFlatIndex(indexPointer: indexPointer)
+        faiss_IndexIVFFlat_cast(indexPointer.pointer) == nil ?
+            nil : IVFFlatIndex(indexPointer: indexPointer, quantizer: nil)
     }
 
     public convenience init(quantizer: FlatIndex, d: Int, nlist: Int) throws {
@@ -28,7 +32,7 @@ public final class IVFFlatIndex: BaseIndex {
                 nlist
             )
         )
-        self.init(indexPointer: IndexPointer(indexPtr.pointee!))
+        self.init(indexPointer: IndexPointer(indexPtr.pointee!), quantizer: quantizer)
     }
 
     public convenience init(quantizer: FlatIndex, d: Int, nlist: Int, metricType: MetricType) throws {
@@ -43,7 +47,7 @@ public final class IVFFlatIndex: BaseIndex {
                 metricType.faissMetricType
             )
         )
-        self.init(indexPointer: IndexPointer(indexPtr.pointee!))
+        self.init(indexPointer: IndexPointer(indexPtr.pointee!), quantizer: quantizer)
     }
 
     public var nprobe: Int {

@@ -1,6 +1,6 @@
 import SwiftFaissC
 
-public class ScalarQuantizerIndex: BaseIndex {
+public final class ScalarQuantizerIndex: BaseIndex {
     public internal(set) var indexPointer: IndexPointer
 
     deinit {
