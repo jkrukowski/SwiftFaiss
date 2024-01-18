@@ -17,14 +17,20 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/jkrukowski/FaissMobile", from: "0.0.1"),
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.3.0"),
-        .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.50.4")
+        .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.50.4"),
+        .package(url: "https://github.com/apple/swift-log", from: "1.5.3")
     ],
     targets: [
         .executableTarget(
             name: "SwiftFaissCLI",
             dependencies: [
                 .target(name: "SwiftFaiss"),
-                .product(name: "ArgumentParser", package: "swift-argument-parser")
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                .product(name: "Logging", package: "swift-log")
+            ],
+            resources: [
+                .copy("data/sentences.txt"),
+                .copy("data/embeddings.txt")
             ],
             plugins: [
                 .plugin(

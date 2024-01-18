@@ -7,8 +7,13 @@ Based on [Faiss Mobile](https://github.com/DeveloperMindset-com/faiss-mobile) an
 ## Run demo
 
 ```
-$ swift run swift-faiss
+$ swift run swift-faiss <subcommand> <options>
 ```
+
+Available subcommands:
+
+- `flat`: create a `FlatIndex`, add vectors to it and search for the most similar sentences.
+- `ivfflat`: create an `IVFFlatIndex`, train and add vectors to it and search for the most similar sentences.
 
 ## Format code
 
