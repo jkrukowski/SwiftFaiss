@@ -14,6 +14,7 @@ Available subcommands:
 
 - `flat`: create a `FlatIndex`, add vectors to it and search for the most similar sentences.
 - `ivfflat`: create an `IVFFlatIndex`, train and add vectors to it and search for the most similar sentences.
+- `pq`: create an `PQIndex`, train and add vectors to it and search for the most similar sentences.
 
 ## Format code
 

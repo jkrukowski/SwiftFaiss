@@ -3,7 +3,8 @@ import Foundation
 
 let subcommands: [any AsyncParsableCommand.Type] = [
     FlatIndexExample.self,
-    IVFFlatIndexExample.self
+    IVFFlatIndexExample.self,
+    PQIndexExample.self
 ]
 
 @main

@@ -32,7 +32,19 @@ public final class AnyIndex: BaseIndex {
         )
         self.init(indexPointer: IndexPointer(indexPtr.pointee!))
     }
+}
 
+extension AnyIndex {
+    public static func PQ(d: Int, m: Int, nbit: Int = 8, metricType: MetricType) throws -> AnyIndex {
+        try AnyIndex(d: d, metricType: metricType, description: "PQ\(m)x\(nbit)")
+    }
+
+    public static func IVFPQ(d: Int, m: Int, nbit: Int = 8, metricType: MetricType) throws -> AnyIndex {
+        try AnyIndex(d: d, metricType: metricType, description: "PQ\(m)x\(nbit)")
+    }
+}
+
+extension AnyIndex {
     public func toFlat() -> FlatIndex? {
         FlatIndex.from(indexPointer)
     }
