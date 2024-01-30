@@ -48,6 +48,16 @@ let result = try index.search([[0.1, 0.5, 0.9]], k: 2)
 // do something with result
 ```
 
+## Installation
+
+### Swift Package Manager
+
+You can use [Swift Package Manager](https://swift.org/package-manager/) and specify dependency in `Package.swift` by adding:
+
+```swift
+.package(url: "https://github.com/jkrukowski/SwiftFaiss.git", from: "0.0.7")
+```
+
 ## Format code
 
 ```
