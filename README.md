@@ -49,6 +49,8 @@ let result = try index.search([[0.1, 0.5, 0.9]], k: 2)
 // do something with result
 ```
 
+https://github.com/jkrukowski/UseSwiftFaiss contains an iOS example.
+
 ## Installation
 
 ### Swift Package Manager
